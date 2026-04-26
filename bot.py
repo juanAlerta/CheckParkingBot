@@ -8,7 +8,7 @@ from telegram.ext import MessageHandler, filters
 from dotenv import load_dotenv
 import os
 
-load_dotenv('/home/$USER/.env')
+load_dotenv('/home/pi/.env')
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = int(os.getenv("TELEGRAM_CHAT_ID"))
