@@ -151,6 +151,42 @@ TELEGRAM_CHAT_ID=tu_chat_id_aqui
 ESP32_IP=192.168.1.xxx
 ```
 
+### Configuración de persistencia con Systmctl
+Creación del servicio para que se inicie de manera automática al encender la Raspberry.
+```bash
+sudo nano /etc/systemd/system/parkingbot.service
+```
+```ìni
+[Unit]
+Description=CheckParkingBot Telegram Bot
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/CheckParkingBot
+ExecStart=/usr/bin/python3 /home/pi/CheckParkingBot/bot.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Activa e inicia el servicio
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable parkingbot
+sudo systemctl start parkingbot
+```
+Verifica que está corriendo
+```bash
+sudo systemctl status parkingbot
+```
+Para ver los logs en tiempo real
+```bash
+journalctl -u parkingbot -f
+```
 ### 3.4 Estructura del repositorio
 
 ```
@@ -194,10 +230,3 @@ python3 ~/CheckParkingBot/bot.py
 > El bot solo responde al `chat_id` configurado en `.env`. Cualquier otro usuario recibirá "No autorizado."
 
 ---
-
-## Próximos pasos
-
-- [ ] Configurar systemd para que el bot arranque automáticamente con la RPi
-- [ ] Asignar IP fija al ESP32-CAM en el router
-- [ ] Añadir comando `/estado` para verificar si el ESP32-CAM está online
-- [ ] Notificaciones automáticas con sensor de movimiento
